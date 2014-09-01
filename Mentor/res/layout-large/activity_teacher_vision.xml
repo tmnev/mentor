@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lil"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="right"
+    android:orientation="horizontal"> 
+  <uni.oulu.mentor.SliderImage
+     android:id="@+id/sliderBtn"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_alignParentRight="true"
+     android:layout_gravity="center_vertical"
+     android:layout_alignParentBottom="true"
+    >
+ </uni.oulu.mentor.SliderImage>
+<uni.oulu.mentor.SliderPanel 
+     android:id="@+id/sliderPanel"
+     android:layout_width="360dip"
+     android:layout_height="match_parent"
+     android:visibility="gone"
+     android:minWidth="360dip"
+     android:layout_alignParentRight="true"
+     android:background="#FF000000"
+     android:layout_alignParentBottom="true">
+     <LinearLayout 
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="vertical">
+		 <LinearLayout
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:orientation="horizontal">
+		     <Button android:id="@+id/goto_first"
+		         android:layout_width="wrap_content" android:layout_height="wrap_content"
+		         android:text="@string/first">
+		     </Button>
+		     <Button android:id="@+id/goto_second"
+		         android:layout_width="wrap_content" android:layout_height="wrap_content"
+		         android:text="@string/second">
+		     </Button>
+		     <Button android:id="@+id/goto_last"
+		         android:layout_width="wrap_content" android:layout_height="wrap_content"
+		         android:text="@string/last">
+		     </Button>
+	     </LinearLayout>
+	
+	     <android.support.v4.view.ViewPager
+	         android:id="@+id/pager"
+	         android:layout_width="match_parent"
+	         android:layout_height="0dip"
+	         android:layout_weight="1">
+	     </android.support.v4.view.ViewPager>
+	</LinearLayout>
+     
+ </uni.oulu.mentor.SliderPanel>
+  
+</RelativeLayout>

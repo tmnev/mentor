@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="uni.oulu.mentor"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<instrumentation android:targetPackage="uni.oulu.mentor" android:name="android.test.InstrumentationTestRunner" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <uses-library android:name="android.test.runner" />
+        <activity
+            android:name="uni.oulu.mentor.MainViewActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="reverseLandscape"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uni.oulu.mentor.TeacherViewActivity"
+            android:label="@string/title_activity_teacher_view"
+            android:parentActivityName="uni.oulu.mentor.MainViewActivity"
+            android:screenOrientation="reverseLandscape"
+            android:windowSoftInputMode="stateHidden" 
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uni.oulu.mentor.MainViewActivity" />
+        </activity>
+        <activity
+            android:name="uni.oulu.mentor.TeacherVisionActivity"
+            android:label="@string/title_activity_teacher_vision"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true"
+            android:parentActivityName="uni.oulu.mentor.TeacherViewActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uni.oulu.mentor.TeacherViewActivity" />
+        </activity>
+        <activity
+            android:name="uni.oulu.mentor.StudentViewActivity"
+            android:label="@string/title_activity_student_view"
+            android:parentActivityName="uni.oulu.mentor.MainViewActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="reverseLandscape"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uni.oulu.mentor.MainViewActivity" />
+        </activity>
+        <activity
+            android:name="uni.oulu.mentor.StudentVisionActivity"
+            android:label="@string/title_activity_student_vision"
+            android:parentActivityName="uni.oulu.mentor.StudentViewActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="reverseLandscape"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uni.oulu.mentor.StudentViewActivity" />
+        </activity>
+        <service android:name="uni.oulu.mentor.TeacherVisionService" />
+    </application>
+
+</manifest>

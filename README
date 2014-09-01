@@ -1,0 +1,9 @@
+Author: Tom Nevala, student at University of Oulu, <tmnevala@gmail.com>
+
+Mentor is a real-time feedback system for education
+The system was developed as a part of Master's thesis: "Real-time feedback system for education".
+The thesis was made for Department of Computer Science and Engineering (DCSE), University of Oulu 
+Mentor folder contains the mobile (Android) application, which acts as a client-side for Mentor system.
+This client-side application is under GPL v3 license, because it uses AndAR (https://code.google.com/p/andar/).
+The server-side was developed as a part of "Programmable Web Project"-course and updated for this thesis work.
+

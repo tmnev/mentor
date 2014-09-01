@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" 
+    android:id="@+id/sv_fragment">
+
+	<FrameLayout 
+	   	android:id="@+id/sv_fragment_container"
+	   	android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    >
+	    <LinearLayout
+	        android:id="@+id/sv_wrapper"
+	        android:orientation="horizontal"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent">
+		    <LinearLayout
+			   android:id="@+id/sv_leftside"
+			   android:layout_width="match_parent"
+			   android:layout_height="match_parent"
+			   android:orientation="vertical"
+			   android:layout_weight="0.5"
+			  >
+		    </LinearLayout>
+		    <ListView android:id="@id/android:list"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="#00FF00"
+		        android:drawSelectorOnTop="false"
+		        android:layout_weight="0.5"/>
+	    </LinearLayout>
+    </FrameLayout>
+ </LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FF000000" >
+	<RadioGroup
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+	    <RadioButton android:id="@+id/puFeedback"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/puFeedback"
+	        android:textColor="#FFF"
+	        android:onClick="onPersonalRbClicked"/>
+	    <RadioButton android:id="@+id/puQuestion"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/puQuestion"
+	        android:textColor="#FFF"
+	        android:onClick="onPersonalRbClicked"/>
+	    <RadioButton android:id="@+id/puAnswer"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/puAnswer"
+	        android:textColor="#FFF"
+	        android:onClick="onPersonalRbClicked"/>
+	</RadioGroup>
+    <TextView
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textColor="#FFF"
+	    android:textSize="12sp"
+	    android:text="@string/customText">
+	</TextView>
+    <EditText
+        android:id="@+id/customTextEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/customTextHint"
+        android:textColor="#FFF"
+        android:inputType="textShortMessage|textFilter"
+        android:maxLength="30"
+        android:maxLines="1">
+    </EditText>
+    <Button 
+        android:id="@+id/sendPersonalBtn"
+        android:text="@string/send"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:onClick="sendPersonalClicked"
+        android:background="#FF232323"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content">
+    </Button>
+</LinearLayout>

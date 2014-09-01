@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="alertThresholdKeys">
+        <item>one student</item>
+        <item>35 percent</item>
+        <item>65 percent</item>
+        <item>100 percent</item>
+    </string-array>
+    <string-array name="alertThresholdValues">
+        <item>1</item>
+        <item>35</item>
+        <item>65</item>
+        <item>100</item>
+    </string-array>
+    <string-array name="timespanKeys">
+        <item>one minute</item>
+        <item>five minutes</item>
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+    </string-array>
+    <string-array name="timespanValues">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="flaretimeKeys">
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>30 seconds</item>
+        <item>one minutes</item>
+        <item>two minutes</item>
+    </string-array>
+    <string-array name="flaretimeValues">
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+    </string-array>
+    <string-array name="colorKeys">
+        <item>green</item>
+        <item>yellow</item>
+        <item>red</item>
+        <item>blue</item>
+        <item>magenta</item>
+        <item>cyan</item>
+    </string-array>
+    <string-array name="colorValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+</resources>
