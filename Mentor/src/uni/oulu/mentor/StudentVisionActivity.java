@@ -54,6 +54,7 @@ public class StudentVisionActivity extends Activity {
 	protected static final int CONNTIME = 30000;
 	protected static final int POLLSPAN = 4000;
 	private static final String allowed = new String("0123456789abcdefghijklmnopqrstuvwxyzåäöABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ ?");
+	private static final String lectureNoLongerOnline = new String("This lecture is no longer online. Please log out");
 	private static final int NUM_ITEMS = 3;
 	private static final int MIN_LENGTH = 2;
 	private static final int MAX_LENGTH = 30;
@@ -70,6 +71,8 @@ public class StudentVisionActivity extends Activity {
 	private boolean pollTeacherFeedbacksCancelled = false;
 	private boolean pollTeacherQuestionsCancelled = false;
 	private boolean pollTeacherAnswersCancelled = false;
+	private boolean pollLectureOnlineCancelled = false;
+	private static boolean lectureIsOnline = true;
 	private static boolean svListItemAnswer = false;
 	private static int immediate = 0;
 	private static int svListItemQuid = 0;
@@ -84,6 +87,7 @@ public class StudentVisionActivity extends Activity {
 	private AsyncTask<String, Integer, Double> pollTeacherFeedbacksTask;
 	private AsyncTask<String, Integer, Double> pollTeacherQuestionsTask;
 	private AsyncTask<String, Integer, Double> pollTeacherAnswersTask;
+	private AsyncTask<String, Integer, Double> pollLectureOnlineTask;
 	private static ArrayAdapter<String> mTeacherFeedbackAdapter;
 	private static ArrayAdapter<String> mTeacherQuestionAdapter;
 	private static ArrayAdapter<String> mTeacherAnswerAdapter;
@@ -154,6 +158,10 @@ public class StudentVisionActivity extends Activity {
 		pollTeacherAnswersCancelled = false;
 		pollTeacherAnswersTask = new PollTeacherAnswersTask(getApplicationContext());
 		pollTeacherAnswersTask.execute();
+		//begin to poll that is lecture online
+		pollLectureOnlineCancelled = false;
+		pollLectureOnlineTask = new PollLectureOnlineTask(getApplicationContext());
+		pollLectureOnlineTask.execute();
 	}
 
 	@Override
@@ -180,6 +188,7 @@ public class StudentVisionActivity extends Activity {
 		pollTeacherFeedbacksCancelled = true;
 		pollTeacherQuestionsCancelled = true;
 		pollTeacherAnswersCancelled = true;
+		pollLectureOnlineCancelled = true;
 		//put this student account offline
 		new ExitStudentTask(getApplicationContext()).execute();
 		super.onDestroy();
@@ -196,7 +205,10 @@ public class StudentVisionActivity extends Activity {
 				message = svCustomTextEdit.getText().toString();
 			}
 			//send the answer, delegated_to this userId
-			new PostAnswerTask(this).execute();
+			if(lectureIsOnline)
+				new PostAnswerTask(this).execute();
+			else
+				Toast.makeText(getApplicationContext(), lectureNoLongerOnline, Toast.LENGTH_SHORT).show();
 		}
 		//dismiss the dialog
 		if(svPuFragment != null) {
@@ -487,7 +499,10 @@ public class StudentVisionActivity extends Activity {
 		            public void onClick(View v) {
 		            	//get lecture and is it online
 		            	//if the lecture is online
-		            	new PostFeedbackTask(getActivity().getApplicationContext()).execute();
+		            	if(lectureIsOnline)
+		            		new PostFeedbackTask(getActivity().getApplicationContext()).execute();
+		            	else
+		            		Toast.makeText(v.getContext(), lectureNoLongerOnline, Toast.LENGTH_SHORT).show();
 		            }
 		        });
 				linl.addView(btn);
@@ -511,7 +526,10 @@ public class StudentVisionActivity extends Activity {
 		    					>= MIN_LENGTH && questionEdit.getText().toString().length() <= MAX_LENGTH) {
 		    				questionContent = questionEdit.getText().toString();
 		    			}
-		            	new PostQuestionTask(getActivity().getApplicationContext()).execute();
+		    			if(lectureIsOnline)
+		    				new PostQuestionTask(getActivity().getApplicationContext()).execute();
+		            	else
+		            		Toast.makeText(v.getContext(), lectureNoLongerOnline, Toast.LENGTH_SHORT).show();
 		            }
 		        });
 				CheckBox cb = new CheckBox(leftSide.getContext());
@@ -544,7 +562,10 @@ public class StudentVisionActivity extends Activity {
 		    					>= MIN_LENGTH && answerEdit.getText().toString().length() <= MAX_LENGTH) {
 		    				answerContent = answerEdit.getText().toString();
 		    			}
-		            	new PostAnswerTask(getActivity().getApplicationContext()).execute();
+		    			if(lectureIsOnline)
+		    				new PostAnswerTask(getActivity().getApplicationContext()).execute();
+		            	else
+		            		Toast.makeText(v.getContext(), lectureNoLongerOnline, Toast.LENGTH_SHORT).show();
 		            }
 		        });
 				CheckBox cb = new CheckBox(leftSide.getContext());
@@ -905,6 +926,96 @@ public class StudentVisionActivity extends Activity {
 		}
 	}	
 
+	/**
+	 * This task is used to send HTTP GET request to the server.
+	 * The task polls if the lecture which this student is registered to is online, by calling itself all over again as long as allowed to
+	 *  */	
+	private class PollLectureOnlineTask extends AsyncTask<String, Integer, Double> {
+		protected int getLecOnlineCode = 0;
+		String results = "";
+		Context mContext;
+		public PollLectureOnlineTask(Context context) {
+			this.mContext = context;
+		}
+		@Override
+		protected Double doInBackground(String... params) {
+			BufferedReader reader = null;
+			if(networkConnected(mContext)) {
+				try {
+					URL urli = new URL(coursesUrl+"/"+student.getCourseIdChosen()+"/lectures/"+student.getLectureIdChosen());
+					HttpURLConnection httpCon = (HttpURLConnection)urli.openConnection();
+					httpCon.setDoInput(true);
+					httpCon.setRequestProperty("Accept","application/json");
+					httpCon.setRequestMethod("GET");
+					httpCon.setReadTimeout(CONNTIME);
+					httpCon.setConnectTimeout(CONNTIME);
+					if(httpCon.getResponseCode() == HttpURLConnection.HTTP_OK) {
+						Log.i(TAG, "GET LECTURE ONLINE SUCCEEDED");
+						getLecOnlineCode = 1;
+					}
+					else {
+						Log.e(TAG, "GET LECTURE ONLINE FAILED");
+						getLecOnlineCode = 2;
+					}
+					reader = new BufferedReader(new InputStreamReader(httpCon.getInputStream(), "UTF-8"));
+					StringBuilder sb = new StringBuilder();
+					while(true) {
+						String line = reader.readLine();
+						if(line == null)
+							break;
+						sb.append(line).append("\n");
+					}
+					results = sb.toString();
+				}
+				catch(UnsupportedEncodingException e) {
+					Log.e(TAG, "UNSUPPORTED ENCODING EXCEPTION AT GET LECTURE ONLINE "+e);
+				}
+				catch(IOException e) {
+					Log.e(TAG, "IO EXCEPTION AT GET LECTURE ONLINE "+e);
+				}
+				finally {
+					if(reader != null) {
+						try {
+							reader.close();
+						}
+						catch(IOException e) {
+							Log.e(TAG, "IOException at poll lecture online "+e);
+						}
+					}
+				}
+				try {
+					Thread.sleep(POLLSPAN);
+				}
+				catch(InterruptedException e) {
+					return null;
+				}
+			}
+			return null;
+		}
+		protected void onPostExecute(Double result) {
+			if(getLecOnlineCode == 1) {
+				if(results.contains("online")) {
+					String [] lecOnlineParts = results.split("online");
+					String lecOnline = lecOnlineParts[1].substring(3, 4);
+					int lecOn = 1;
+					if(!lecOnline.equals("n"))
+						lecOn = Integer.parseInt(lecOnline);
+					if(lecOn == 0) {
+						//this lecture is no longer online
+						Toast.makeText(getApplicationContext(), lectureNoLongerOnline, Toast.LENGTH_SHORT).show();
+						lectureIsOnline = false;
+					}
+					else
+						lectureIsOnline = true;
+				}
+			}
+			if(pollLectureOnlineCancelled == false) {
+				pollLectureOnlineTask = new PollLectureOnlineTask(mContext);
+				pollLectureOnlineTask.execute();
+			}
+		}
+	}		
+	
 	/**
 	 * This task is used to send HTTP GET request to the server.
 	 * The task polls answers, sent by the teacher, by calling itself all over again as long as allowed to

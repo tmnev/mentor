@@ -103,6 +103,8 @@ public class TeacherVisionActivity extends AndARActivity implements OnSharedPref
 	protected static final int CONNTIME = 30000;
 	protected static final int POLLSPAN = 4000;
 	private static final String allowed = new String("0123456789abcdefghijklmnopqrstuvwxyzåäöABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ ?");
+	private static final String sliderPanelOpen = new String("Slider panel is open. Please close it before sending personal message");
+	private static final String noRegStudent = new String("No registered student for this marker found");
 	private static final int MIN_LENGTH = 2;
 	private static final int MAX_LENGTH = 30;
 	protected static final int NUM_ITEMS = 3;
@@ -477,6 +479,9 @@ public class TeacherVisionActivity extends AndARActivity implements OnSharedPref
 				}
 			}
 		}
+		else {
+			Toast.makeText(getApplicationContext(), noRegStudent, Toast.LENGTH_SHORT).show();
+		}
 		chosenMarker = 0;
 	}
 	
@@ -706,11 +711,12 @@ public class TeacherVisionActivity extends AndARActivity implements OnSharedPref
 						}
 					}
 					else {
-						Toast.makeText(getApplicationContext(), "Slider panel is open. Please close it before sending personal message", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), sliderPanelOpen, Toast.LENGTH_SHORT).show();
+						
 					}
 				}
 				else {
-					Toast.makeText(getApplicationContext(), "No registered student for this marker found", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), noRegStudent, Toast.LENGTH_SHORT).show();
 				}
 				//reset the touched marker here to 0
 				touchMarker = 0;
@@ -2901,7 +2907,7 @@ public class TeacherVisionActivity extends AndARActivity implements OnSharedPref
 								while(iter.hasNext()) {
 									Student onlineStudent = iter.next();
 									if(onlineStudent.getUserName().equals(userName))
-										onlineStudentsList.remove(location);
+										onlineStudentsList.remove(location); //TODO: make sure that this really removes the student
 									location++;
 								}	
 							}
